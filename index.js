@@ -4,5 +4,6 @@ listen(async (api, event) => {
   if (event.type === "message") {
   } else if (event.type === "message_reply") {
   } else if (event.type === "event") {
+    require("./handle/handleEvents")({ api, event });
   }
 });
