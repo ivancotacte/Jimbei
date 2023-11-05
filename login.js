@@ -26,6 +26,16 @@ const local = {
   },
 };
 
+process.on("exit", (code) => {
+    fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
+    log.info("bot", "offline");
+});
+
+setInterval(function () {
+    fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
+    log.info("app_state", "refresh");
+}, Math.floor(1800000 * Math.random() + 1200000));
+
 async function listen(orion) {
   try {
     const appStatePath = path.join(__dirname, appStateFile);
@@ -47,6 +57,12 @@ async function listen(orion) {
           api.listenMqtt((err, event) => {
             if (err) return console.error(err);
             orion(api, event);
+
+            if (isAppState) {
+                fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
+                isAppState = false;
+            }
+            
           });
         } catch (err) {
           if (!!err.errorSummary) {
