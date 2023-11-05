@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const login = require("fca-project-orion");
-const cronSchedules = require("./cron");
 const config = require("./config");
 
 const appStateFile = "./appstate.json";
@@ -34,8 +33,6 @@ async function listen(orion) {
     login(
       { appState: credentials, proxy: proxy, local: local },
       async (err, api) => {
-        cronSchedules(api);
-
         try {
           if (err) return console.error(err);
           api.setOptions({
