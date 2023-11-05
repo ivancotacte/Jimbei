@@ -11,5 +11,8 @@
     "name": "Ivan Cotacte",
     "email": "cotactearmenion@gmail.com"
   },
-  "license": "ISC"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ivancotacte/Jimbei/issues"
+  }
 }
