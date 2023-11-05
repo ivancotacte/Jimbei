@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const login = require("fca-project-orion");
-const config = require("./config");
 
 const appStateFile = "./appstate.json";
 
