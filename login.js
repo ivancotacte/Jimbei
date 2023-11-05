@@ -3,6 +3,7 @@ const path = require("path");
 const login = require("fca-project-orion");
 
 const appStateFile = "./appstate.json";
+let isAppState = true;
 
 const proxy = {
   protocol: "https",
