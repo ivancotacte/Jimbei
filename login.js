@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const login = require("fca-project-orion");
+const log = require("npmlog");
 
 const appStateFile = "./appstate.json";
 let isAppState = true;
@@ -26,16 +27,6 @@ const local = {
   },
 };
 
-process.on("exit", (code) => {
-    fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
-    log.info("bot", "offline");
-});
-
-setInterval(function () {
-    fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
-    log.info("app_state", "refresh");
-}, Math.floor(1800000 * Math.random() + 1200000));
-
 async function listen(orion) {
   try {
     const appStatePath = path.join(__dirname, appStateFile);
@@ -58,11 +49,21 @@ async function listen(orion) {
             if (err) return console.error(err);
             orion(api, event);
 
+            process.on("exit", (code) => {
+              fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
+              log.info("bot", "offline");
+            });
+
+            setInterval(function() {
+              fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
+              log.info("app_state", "refresh");
+            }, Math.floor(1800000 * Math.random() + 1200000));
+
             if (isAppState) {
-                fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
-                isAppState = false;
+              fs.writeFileSync(__dirname + "/appstate.json", JSON.stringify(api.getAppState()), "utf8");
+              isAppState = false;
             }
-            
+
           });
         } catch (err) {
           if (!!err.errorSummary) {
